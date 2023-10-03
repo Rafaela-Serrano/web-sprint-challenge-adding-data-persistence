@@ -12,10 +12,55 @@ exports.up = async function (knex) {
         .defaultTo(0)
     
     })
+    .createTable("resources", table => {
+        table.increments("resource_id")
+        table.string("resource_name")
+        .notNullable()
+        .unique()
+        table.string("resource_description")
+    })
+    .createTable("tasks", table => {
+        table.increments("task_id")
+        table.string("task_description")
+        .notNullable()
+        table.string("task_notes")
+        table.integer("task_completed")
+        .unsigned()
+        .defaultTo(0)
+        table.integer("project_id")
+        .unsigned()
+        .notNullable()
+        .references("project_id")
+        .inTable("projects")
+        .onDelete('RESTRICT')
+        .onUpdate('RESTRICT')
+
+    })
+    .createTable("project_resources", table => {
+        table.increments("p_r")
+        table.integer("project_id")
+        .unsigned()
+        .notNullable()
+        .references("project_id")
+        .inTable("projects")
+        .onDelete('RESTRICT')
+        .onUpdate('RESTRICT')
+        table.integer("resource_id")
+        .unsigned()
+        .notNullable()
+        .references("resource_id")
+        .inTable("resources")
+        .onDelete('RESTRICT')
+        .onUpdate('RESTRICT')
+
+    })
 };
 
 
 exports.down = async function(knex) {
     await knex.schema
+    .dropTableIfExists("project_resources")
+    .dropTableIfExists("tasks")
+    .dropTableIfExists("resources")
     .dropTableIfExists("projects")
 };
