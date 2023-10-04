@@ -7,9 +7,9 @@ exports.up = async function (knex) {
         .notNullable()
         .unique()
         table.string("project_description")
-        table.integer("project_completed")
+        table.boolean("project_completed")
         .unsigned()
-        .defaultTo(0)
+        .defaultTo(false)
     
     })
     .createTable("resources", table => {
