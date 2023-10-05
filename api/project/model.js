@@ -2,25 +2,41 @@
 const db = require("../../data/dbConfig.js")
 
 async function getAll() {
-    const p_db = await db('projects');
+    const projectsAll = await db('projects');
 
-    if(p_db.project_completed === 0){
+        const project = [];
 
-        // this is the way I'm trying to model it
-        const project = {
-            project_name: p_db.project_name,
-            project_description: p_db.project_description,
-            project_completed: false
-        }
+        projectsAll.forEach( p => {
+            if(p.project_completed === 0 ){
+                project.push({
+                    project_name:p.project_name,
+                    project_description:p.project_description,
+                    project_completed: Boolean(p.project_completed)})
+                
+                return project
+                
+                }else{
+                project.push({
+                        project_name:p.project_name,
+                        project_description:p.project_description,
+                        project_completed: Boolean(p.project_completed)})
 
-        return project
+                return project
+
+                }
+            }); 
         
-    } else {
-        return p_db
-    }
+      return project
+   
+}
+
+ function insert(project) {
+
+    return db('projects').insert(project)
 
 }
 
 module.exports = {
     getAll,
+    insert,
 }

@@ -10,4 +10,17 @@ router.get("/", async (req, res, next) => {
     } catch(err) { next(err) }
 })
 
+router.post("/", async (req, res, next) => {
+    try{
+
+        const project = req.body 
+
+        const add_project = await projectsModule.insert(project)
+
+        res.status(201).json(add_project)
+
+
+    }catch(err) { next(err) }
+})
+
 module.exports = router
