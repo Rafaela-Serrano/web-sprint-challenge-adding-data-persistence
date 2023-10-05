@@ -6,7 +6,9 @@
     "start": "node index.js",
     "server": "nodemon index.js",
     "migrate": "knex migrate:latest",
+    "seed":"knex seed:run",
     "rollback": "knex migrate:rollback",
+    "reset":"npm run rollback && npm run migrate && npm run seed",
     "test": "cross-env NODE_ENV=testing jest --verbose --runInBand --silent"
   },
   "repository": {

@@ -30,10 +30,31 @@ async function getAll() {
    
 }
 
- function insert(project) {
+async function insert(project) {
 
-    return db('projects').insert(project)
+    const add_project = await db('projects').insert(project)
 
+    const created_project = await db('projects')
+    .where('project_id', add_project)
+    .first()
+
+    if(project.project_completed === 0){
+        const modify_created = {
+            project_id:created_project.project_id,
+            project_name:created_project.project_name,
+            project_description:created_project.project_description,
+            project_completed:Boolean(created_project.project_completed)
+        }
+        return modify_created
+    }else{
+        const modify_created = {
+            project_id:created_project.project_id,
+            project_name:created_project.project_name,
+            project_description:created_project.project_description,
+            project_completed:Boolean(created_project.project_completed)
+        }
+        return modify_created
+    }           
 }
 
 module.exports = {

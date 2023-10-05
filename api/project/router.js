@@ -13,13 +13,24 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
     try{
 
-        const project = req.body 
+        if(
+            req.body.project_name === undefined|| 
+            typeof req.body.project_name !== "string"||
+            !req.body.project_name.trim()            
+           ){
+            next({
+                status:400,
+                message:"project_name is required"
+            })
 
-        const add_project = await projectsModule.insert(project)
+        } else {
+            const project = req.body 
 
-        res.status(201).json(add_project)
+            const add_project = await projectsModule.insert(project)
 
+            res.status(201).json(add_project)
 
+        }
     }catch(err) { next(err) }
 })
 
